@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>ユーザー登録</title>
+<title>メッセージ編集</title>
 </head>
 <body>
 	<div class="main-contents">
