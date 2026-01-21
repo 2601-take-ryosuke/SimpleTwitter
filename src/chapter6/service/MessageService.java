@@ -109,15 +109,16 @@ public class MessageService {
 			connection = getConnection();
 
 			Integer id = null;
-			if (!StringUtils.isEmpty(messageId)) {
-				id = Integer.parseInt(messageId);
+			if (!messageId.matches("^[0-9]+$")) {
+				return null;
 			}
 
+			id = Integer.parseInt(messageId);
 			Message message = new MessageDao().select(connection, id);
 			commit(connection);
 
 			return message;
-		} catch (RuntimeException e) {
+		}catch (RuntimeException e) {
 			rollback(connection);
 			log.log(Level.SEVERE, new Object() {
 			}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);

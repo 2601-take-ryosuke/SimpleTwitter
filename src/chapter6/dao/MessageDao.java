@@ -164,17 +164,15 @@ public class MessageDao {
 				}.getClass().getEnclosingMethod().getName());
 
 		try {
-			if (rs.wasNull()) {
-				return null;
-			} else {
-				rs.first();
-				Message message = new Message();
+			Message message = null;
+			if (rs.next()) {
+				message = new Message();
 				message.setId(rs.getInt("id"));
 				message.setText(rs.getString("text"));
 				message.setUserId(rs.getInt("user_id"));
 				message.setCreatedDate(rs.getTimestamp("created_date"));
-				return message;
 			}
+			return message;
 		} finally {
 			close(rs);
 		}
