@@ -97,7 +97,7 @@ public class MessageService {
 		}
 	}
 
-	public Message selectMessageByMessageId(String messageId) {
+	public Message select(int messageId) {
 
 		log.info(new Object() {
 		}.getClass().getEnclosingClass().getName() +
@@ -108,13 +108,7 @@ public class MessageService {
 		try {
 			connection = getConnection();
 
-			Integer id = null;
-			if (!messageId.matches("^[0-9]+$")) {
-				return null;
-			}
-
-			id = Integer.parseInt(messageId);
-			Message message = new MessageDao().select(connection, id);
+			Message message = new MessageDao().select(connection, messageId);
 			commit(connection);
 
 			return message;
@@ -133,7 +127,7 @@ public class MessageService {
 		}
 	}
 
-	public void update(String messageId, String text) {
+	public void update(int messageId, String text) {
 
 		log.info(new Object() {
 		}.getClass().getEnclosingClass().getName() +
@@ -144,12 +138,7 @@ public class MessageService {
 		try {
 			connection = getConnection();
 
-			Integer id = null;
-			if (!StringUtils.isEmpty(messageId)) {
-				id = Integer.parseInt(messageId);
-			}
-
-			new MessageDao().update(connection, id, text);
+			new MessageDao().update(connection, messageId, text);
 			commit(connection);
 		} catch (RuntimeException e) {
 			rollback(connection);
@@ -166,7 +155,7 @@ public class MessageService {
 		}
 	}
 
-	public void delete(String messageId) {
+	public void delete(int messageId) {
 
 		log.info(new Object() {
 		}.getClass().getEnclosingClass().getName() +
@@ -177,12 +166,7 @@ public class MessageService {
 		try {
 			connection = getConnection();
 
-			Integer id = null;
-			if (!StringUtils.isEmpty(messageId)) {
-				id = Integer.parseInt(messageId);
-			}
-
-			new MessageDao().delete(connection, id);
+			new MessageDao().delete(connection, messageId);
 			commit(connection);
 		} catch (RuntimeException e) {
 			rollback(connection);

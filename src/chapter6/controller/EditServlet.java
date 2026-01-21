@@ -48,21 +48,23 @@ public class EditServlet extends HttpServlet {
 
 		HttpSession session = request.getSession();
 		String messageId = request.getParameter("message_id");
-		String text = (String) session.getAttribute("editedText");
 		User user = (User) session.getAttribute("loginUser");
-		Message message = new MessageService().selectMessageByMessageId(messageId);
 		List<String> errorMessages = new ArrayList<String>();
 
-		if (message == null || message.getUserId() != user.getId()) {
+		if (!messageId.matches("^[0-9]+$")) {
 			errorMessages.add("不正なパラメータが入力されました");
 			session.setAttribute("errorMessages", errorMessages);
 			response.sendRedirect("./");
 			return;
 		}
 
-		if (text != null) {
-			message.setText(text);
-			session.removeAttribute("editedText");
+		Message message = new MessageService().select(Integer.parseInt(messageId));
+
+		if (message == null || message.getUserId() != user.getId()) {
+			errorMessages.add("不正なパラメータが入力されました");
+			session.setAttribute("errorMessages", errorMessages);
+			response.sendRedirect("./");
+			return;
 		}
 
 		request.setAttribute("message", message);
@@ -78,22 +80,20 @@ public class EditServlet extends HttpServlet {
 				" : " + new Object() {
 				}.getClass().getEnclosingMethod().getName());
 
-		HttpSession session = request.getSession();
-		String messageId = request.getParameter("message_id");
+		int messageId = Integer.parseInt(request.getParameter("message_id"));
 		String text = request.getParameter("text");
 		List<String> errorMessages = new ArrayList<String>();
 
-		if (isValid(text, errorMessages)) {
-			new MessageService().update(messageId, text);
-		}
-
-		if (errorMessages.size() != 0) {
-			session.setAttribute("errorMessages", errorMessages);
-			session.setAttribute("editedText", text);
-			response.sendRedirect(String.format("./edit?message_id=%s", messageId));
+		if (!isValid(text, errorMessages)) {
+			request.setAttribute("errorMessages", errorMessages);
+			Message message = new MessageService().select(messageId);
+			message.setText(text);
+			request.setAttribute("message", message);
+			request.getRequestDispatcher("edit.jsp").forward(request, response);
 			return;
 		}
 
+		new MessageService().update(messageId, text);
 		response.sendRedirect("./");
 	}
 

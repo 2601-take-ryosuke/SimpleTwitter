@@ -10,7 +10,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import chapter6.beans.Message;
-import chapter6.exception.NoRowsUpdatedRuntimeException;
 import chapter6.exception.SQLRuntimeException;
 import chapter6.logging.InitApplication;
 
@@ -114,11 +113,7 @@ public class MessageDao {
 			ps.setString(1, text);
 			ps.setInt(2, id);
 
-			int count = ps.executeUpdate();
-			if (count == 0) {
-				log.log(Level.SEVERE, "更新対象のレコードが存在しません", new NoRowsUpdatedRuntimeException());
-				throw new NoRowsUpdatedRuntimeException();
-			}
+			ps.executeUpdate();
 		} catch (SQLException e) {
 			log.log(Level.SEVERE, new Object() {
 			}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
