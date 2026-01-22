@@ -51,7 +51,7 @@ public class EditServlet extends HttpServlet {
 		User user = (User) session.getAttribute("loginUser");
 		List<String> errorMessages = new ArrayList<String>();
 
-		if (messageId == "" || !messageId.matches("^[0-9]+$")) {
+		if (StringUtils.isBlank(messageId) || !messageId.matches("^[0-9]+$")) {
 			errorMessages.add("不正なパラメータが入力されました");
 			session.setAttribute("errorMessages", errorMessages);
 			response.sendRedirect("./");
