@@ -99,6 +99,38 @@
 						</div>
 					</c:if>
 				</div>
+				<div class="comments">
+					<c:forEach items="${comments}" var="comment">
+						<c:if test="${comment.messageId == message.id}">
+							<div class="comment">
+								<div class="account-name">
+									<span class="account"> <a href="./?user_id=<c:out value="${comment.userId}"/> "> <c:out value="${comment.account}" />
+									</a>
+									</span> <span class="name"> <c:out value="${comment.name}" />
+									</span>
+								</div>
+								<div class="text">
+									<pre><c:out value="${comment.text}" /></pre>
+								</div>
+								<div class="date">
+									<fmt:formatDate value="${comment.createdDate}" pattern="yyyy/MM/dd HH:mm:ss" />
+								</div>
+							</div>
+						</c:if>
+					</c:forEach>
+					<div class="form-area comment-form">
+						<c:if test="${ isShowMessageForm }">
+							<form action="comment" method="post">
+								返信<br />
+								<input name="message_id" value="${message.id}" id="message_id" type="hidden" />
+								<textarea name="text" cols="85" rows="5" class="comment-box"></textarea>
+								<br />
+								<input type="submit" value="返信">
+								140文字まで）
+							</form>
+						</c:if>
+					</div>
+				</div>
 			</c:forEach>
 		</div>
 

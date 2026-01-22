@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import chapter6.logging.InitApplication;
+import chapter6.service.CommentService;
 import chapter6.service.MessageService;
 
 @WebServlet(urlPatterns = { "/deleteMessage" })
@@ -39,7 +40,9 @@ public class DeleteMessageServlet extends HttpServlet {
 
 	  String messageId = request.getParameter("message_id");
 
-	  new MessageService().delete(Integer.parseInt(messageId));
+	  Integer id = Integer.parseInt(messageId);
+	  new MessageService().delete(id);
+	  new CommentService().deleteByMessageId(id);
 
 	  response.sendRedirect("./");
     }
