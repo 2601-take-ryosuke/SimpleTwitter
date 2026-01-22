@@ -127,7 +127,7 @@ public class MessageService {
 		}
 	}
 
-	public void update(int messageId, String text) {
+	public void update(Message message) {
 
 		log.info(new Object() {
 		}.getClass().getEnclosingClass().getName() +
@@ -138,7 +138,7 @@ public class MessageService {
 		try {
 			connection = getConnection();
 
-			new MessageDao().update(connection, messageId, text);
+			new MessageDao().update(connection, message.getId(), message.getText());
 			commit(connection);
 		} catch (RuntimeException e) {
 			rollback(connection);
