@@ -4,6 +4,8 @@ import static chapter6.utils.CloseableUtil.*;
 import static chapter6.utils.DBUtil.*;
 
 import java.sql.Connection;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -60,7 +62,7 @@ public class MessageService {
 		}
 	}
 
-	public List<UserMessage> select(String userId) {
+	public List<UserMessage> select(String userId, String startDate, String endDate) {
 
 		log.info(new Object() {
 		}.getClass().getEnclosingClass().getName() +
@@ -78,7 +80,14 @@ public class MessageService {
 				id = Integer.parseInt(userId);
 			}
 
-			List<UserMessage> messages = new UserMessageDao().select(connection, id, LIMIT_NUM);
+			String currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+			String startDateTime = (StringUtils.isBlank(startDate) ? "2020-01-01" : startDate)
+					+ " 00:00:00";
+			String endDateTime = (StringUtils.isBlank(endDate) ? currentDate : endDate)
+					+ " 23:59:59";
+
+			List<UserMessage> messages = new UserMessageDao().select(connection, id, startDateTime,
+					endDateTime, LIMIT_NUM);
 			commit(connection);
 
 			return messages;
@@ -112,7 +121,7 @@ public class MessageService {
 			commit(connection);
 
 			return message;
-		}catch (RuntimeException e) {
+		} catch (RuntimeException e) {
 			rollback(connection);
 			log.log(Level.SEVERE, new Object() {
 			}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
