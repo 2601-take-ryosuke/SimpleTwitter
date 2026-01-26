@@ -7,6 +7,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link href="./css/style.css" rel="stylesheet" type="text/css">
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="top.js"></script>
 <title>簡易Twitter</title>
 </head>
 <body>
@@ -98,7 +100,7 @@
 							<div class="delete tool-button">
 									<form action="deleteMessage" method="post">
 										<input name="message_id" value="${message.id}" id="message_id" type="hidden" />
-										<input type="submit" value="削除">
+										<input type="submit" value="削除" class="delete-button">
 									</form>
 							</div>
 							<div class="edit tool-button">
